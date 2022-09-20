@@ -10,20 +10,49 @@ export class Player {
         this.x = 0
         this.y = this.game.height - this.height // positions the player at the bottom left of the canvas space
         this.image = document.getElementById('player')
+        this.speed = 0
+        this.maxSpeed = 10
+        this.velocity = 0
+        this.weight = 1
     }
     
-    // If right arrow is pressed, increase X continuously
-    // If left arrow is pressed, decrease X continuously
     update(input){
+        // horizontal movement
+        this.x += this.speed
         if(input.includes('ArrowRight')){
-            this.x++
+            this.speed = this.maxSpeed
         }else if(input.includes('ArrowLeft')){
-            this.x--
+            this.speed = -this.maxSpeed
+        }else{
+            this.speed = 0
+        }
+
+        //vertical movement
+        if(input.includes('ArrowUp') && this.onGround()){
+            this.velocity -= 30
+        }
+        this.y += this.velocity
+        if(!this.onGround()){
+            this.velocity += this.weight
+        }else{
+            this.velocity = 0
+        }
+
+        // player boundry to keep from running off the canvas
+        if(this.x < 0){
+            this.x = 0
+        }else if(this.x > this.game.width - this.width){
+            this.x = this.game.width - this.width
         }
     }
     draw(context){
         context.fillStyle = 'white' // This line controls player space
         context.fillRect(this.x,this.y,this.width,this.height)
         context.drawImage(this.image,0,0,this.width,this.height,this.x,this.y,this.width,this.height) // Crops out first image in player sprite sheet
+    }
+    
+    //simple boolean utility function to determine is player is in the air or not
+    onGround(){
+        return this.y >= this.game.height - this.height
     }
 }
