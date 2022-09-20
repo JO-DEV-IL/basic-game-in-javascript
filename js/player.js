@@ -1,5 +1,5 @@
 // Player class will need to draw and update the player character, so it will take the entire game object as an argument
-//player.js will keep track of player changes
+// player.js will keep track of player changes
 
 // When passing the game object it does not create a copy of the game object, it only points to it
 export class Player {
@@ -11,8 +11,15 @@ export class Player {
         this.y = this.game.height - this.height // positions the player at the bottom left of the canvas space
         this.image = document.getElementById('player')
     }
-    update(){
-        //this.x++
+    
+    // If right arrow is pressed, increase X continuously
+    // If left arrow is pressed, decrease X continuously
+    update(input){
+        if(input.includes('ArrowRight')){
+            this.x++
+        }else if(input.includes('ArrowLeft')){
+            this.x--
+        }
     }
     draw(context){
         context.fillStyle = 'white' // This line controls player space
